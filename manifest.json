@@ -1,0 +1,15 @@
+{  
+  "manifest_version": 2,
+  "name": "Google Docs Protector",
+  "description": "Switches to viewing mode by default when loading Google Docs",
+  "version": "1.0",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://docs.google.com/*"],
+      "js": ["contentScript.js"]
+    }
+  ]
+}
