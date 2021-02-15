@@ -1,4 +1,4 @@
-//
+// Query parameter indicating user manually switched from preview mode
 const avoidPreviewParam = "__XX__Special_Avoid_Preview__XX__";
 
 // Search every 1/4 second for the element until found for 10 seconds
@@ -12,10 +12,7 @@ const clickDelaySeconds = 0.125;
 window.addEventListener("load", () =>
     {
         // Ignore preview pages
-        if (location.href.endsWith("/preview")) return;
-
-        // Ignore pages which were manually switched from preview
-        if (location.href.indexOf(`${avoidPreviewParam}=true`) !== -1) return;
+        if (location.href.match("^.*/preview[^/]*$")) return;
 
         let attempts = 0;
         let switchToViewingMode = () =>
@@ -48,12 +45,11 @@ window.addEventListener("load", () =>
                 {
                     setTimeout(switchToViewingMode, attemptDelaySeconds * 1000);
                 }
-                else
+                else if (location.href.indexOf(`${avoidPreviewParam}=true`) === -1)
                 {
-                    // As a last resort, if we couldn't find and click the
-                    // Viewing button then trying showing the print preview.
-                    // Since this is re-directing the active tab we must do
-                    // this from the background script.
+                    // If we couldn't find and click the Viewing button then
+                    // show print preview mode.  Since this is re-directing the
+                    // active tab we must do this from the background script.
                     chrome.runtime.sendMessage({ type: "SWITCH_TO_PREVIEW" });
                 }
             }
